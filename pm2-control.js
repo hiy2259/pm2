@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 const SERVICES = require('./ecosystem.config.js');
 
-const PM2_START = spawn('pm2', ['logs']);
+const PM2_START = spawn('pm2', ['logs', '--lines', '1']);
 
 const ESSENTIAL_APP = ['brick', 'meta'];
 const START_SERVICE_LOG = [
@@ -77,14 +77,15 @@ function getPm2List() {
     });
 }
 
-function restartBrick() {
+function startBrick() {
+    let foundBrick = _.find(SERVICES.apps, { name: 'brick' });
+
     return new Promise((resolve, reject) => {
-        pm2.restart('brick', (error, apps) => {
+        pm2.start([foundBrick], (error, apps) => {
             if (error) {
                 reject(error);
                 return;
             }
-
             resolve();
         });
     });
@@ -97,7 +98,6 @@ function stopBrick() {
                 reject(error);
                 return;
             }
-
             resolve();
         });
     });
@@ -127,48 +127,22 @@ PM2_START.stdout.on('data', (data) => {
         // 처음 모든 서비스 구동시 마지막에 구동된 서비스때 brick restart 처리.
         if (isLastService) {
             startCount++;
-
-            if (startCount === process.argv.length) {
+            // startCount에서 brick은 빼야 한다.
+            if (startCount === (process.argv.length - 1)) {
                 isLastService = false;
             } else {
                 return;
-            }            
+            }
         }
 
+        // 기존 restart를 사용했지만 API 동작에서 watch 옵션이 풀려 start로 변경됨.
         connectPm2()
             .then(() => {
-                return getPm2List();
+                return stopBrick();
             })
             .then((list) => {
-                var foundBrick = _.find(list, { name: 'brick' });
-
-                if (foundBrick) {
-                    // console.log('stop brick');
-                    // console.log('brick status1 = ', foundBrick.pm2_env.status);
-                    if (foundBrick.pm2_env.status === 'online') {
-                        return stopBrick();
-                    } else {
-                        return;
-                    }
-                }
-
-                pm2.disconnect();
-            })
-            .then(() => {
-                return getPm2List();
-            })
-            .then((list) => {
-                var foundBrick = _.find(list, { name: 'brick' });
-
-                if (foundBrick) {
-                    // console.log('resatart brick');
-                    // console.log('brick status2 = ', foundBrick.pm2_env.status);
-                    if (foundBrick.pm2_env.status !== 'online') {
-                        return restartBrick();
-                    }
-                }
-
-                pm2.disconnect();
+                console.log('restart brick');
+                return startBrick();
             })
             .then(() => {
                 pm2.disconnect();
