@@ -12,6 +12,7 @@
  * pm2 업데이트 -> pm2 update
  * 리셋 후 메타데이터 리로드 -> pm2 reset <process>
  * 모든 로그 출력 -> pm2 logs
+ * 모니터링 - > pm2 monit
  */
 
 const path = require('path');
