@@ -1,0 +1,22 @@
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+
+### macOS ###
+# General
+.DS_Store
+.DS_Store?
+
+### Visual Studio Code ###
+.vscode/*
+
+# for JRebel
+*.iml
+rebel.xml
+rebel-remote.xml
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
