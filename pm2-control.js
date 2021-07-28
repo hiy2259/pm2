@@ -93,7 +93,19 @@ function startBrick() {
 
 function stopBrick() {
     return new Promise((resolve, reject) => {
-        pm2.stop('brick', (error, apps) => {
+        pm2.delete('brick', (error, apps) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            resolve();
+        });
+    });
+}
+
+function reloadBrick() {
+    return new Promise((resolve, reject) => {
+        pm2.reload('brick', (error, apps) => {
             if (error) {
                 reject(error);
                 return;
@@ -115,7 +127,6 @@ connectPm2()
         pm2.disconnect();
     });
 
-
 PM2_START.stdout.on('data', (data) => {
     let log = data.toString('utf-8');
 
@@ -135,14 +146,20 @@ PM2_START.stdout.on('data', (data) => {
             }
         }
 
-        // 기존 restart를 사용했지만 API 동작에서 watch 옵션이 풀려 start로 변경됨.
         connectPm2()
+            // .then(() => {
+            //     // 기존 restart를 사용했지만 API 동작에서 watch 옵션이 풀려 stop, start로 변경됨.
+            //     return stopBrick();
+            // })
+            // .then((list) => {
+            //     console.log('restart brick');
+            //     return startBrick();
+            // })
             .then(() => {
-                return stopBrick();
-            })
-            .then((list) => {
+                // stop, start 로 했더니 8080 포트로 계속 프로세스를 생성해서 brick이 에러가 남.
+                // watch 풀리는 문제는 나중에 따로 처리.
                 console.log('restart brick');
-                return startBrick();
+                return reloadBrick();
             })
             .then(() => {
                 pm2.disconnect();
