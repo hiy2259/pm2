@@ -39,8 +39,8 @@ const SHERMAN_STATIC_PATH = path.join(SHERMAN_SERVER_CLASS_PATH, 'static');
 const STUDIO_PATH = '../studio';
 const STUDIO_SERVER_CLASS_PATH = path.join(STUDIO_PATH, 'target/classes');
 const STUDIO_STATIC_PATH = path.join(STUDIO_SERVER_CLASS_PATH, 'static');
-const STUDIO2_PATH = '../studio2';
-const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO2_PATH, 'source/target/classes');
+const STUDIO2_PATH = '../studio2/source';
+const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO2_PATH, 'target/classes');
 const STUDIO2_STATIC_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
 
 /**
