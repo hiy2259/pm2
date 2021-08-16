@@ -12,7 +12,7 @@ const PM2_START = spawn('pm2', ['logs', '--lines', '1']);
 
 const ESSENTIAL_APP = ['brick', 'meta'];
 const START_SERVICE_LOG = [
-    ': Started', // spring--boot
+    'JVM running for', // spring-boot
     'server listening on port 18087', // hdfs-browser
     'server Listening on port 18093' // data-import
 ];
