@@ -42,6 +42,7 @@ const STUDIO_STATIC_PATH = path.join(STUDIO_SERVER_CLASS_PATH, 'static');
 const STUDIO2_PATH = '../studio2/source';
 const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO2_PATH, 'target/classes');
 const STUDIO2_STATIC_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
+const STUDIO2_FRONTEND_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
 
 /**
  * node path
@@ -136,7 +137,7 @@ module.exports = {
             'spring-boot:run'
         ],
         watch: [STUDIO2_SERVER_CLASS_PATH],
-        ignore_watch: [STUDIO2_STATIC_PATH],
+        ignore_watch: [STUDIO2_STATIC_PATH, STUDIO2_FRONTEND_PATH],
         node_args: [],
         interpreter: 'none',
         exec_mode: 'fork'
