@@ -23,16 +23,16 @@ const path = require('path');
  */
 const CLUSTER_PATH = '../cluster';
 const CLUSTER_SERVER_CLASS_PATH = path.join(CLUSTER_PATH, 'target/classes');
-const CLUSTER_STATIC_PATH = path.join(CLUSTER_SERVER_CLASS_PATH, 'target/classes');
+const CLUSTER_STATIC_PATH = path.join(CLUSTER_SERVER_CLASS_PATH, 'static');
 const DASHBOARD_PATH = '../dashboard';
 const DASHBOARD_SERVER_CLASS_PATH = path.join(DASHBOARD_PATH, 'target/classes');
-const DASHBOARD_STATIC_PATH = path.join(DASHBOARD_SERVER_CLASS_PATH, 'target/classes');
+const DASHBOARD_STATIC_PATH = path.join(DASHBOARD_SERVER_CLASS_PATH, 'static');
 const DB_BROWSER_PATH = '../db-browser';
 const DB_BROWSER_SERVER_CLASS_PATH = path.join(DB_BROWSER_PATH, 'target/classes');
-const DB_BROWSER_STATIC_PATH = path.join(DB_BROWSER_SERVER_CLASS_PATH, 'target/classes');
+const DB_BROWSER_STATIC_PATH = path.join(DB_BROWSER_SERVER_CLASS_PATH, 'static');
 const META_PATH = '../meta';
 const META_SERVER_CLASS_PATH = path.join(META_PATH, 'target/classes');
-const META_SERVER_STATIC_PATH = path.join(META_SERVER_CLASS_PATH, 'target/classes');
+const META_SERVER_STATIC_PATH = path.join(META_SERVER_CLASS_PATH, 'static');
 const SHERMAN_PATH = '../sherman';
 const SHERMAN_SERVER_CLASS_PATH = path.join(SHERMAN_PATH, 'target/classes');
 const SHERMAN_STATIC_PATH = path.join(SHERMAN_SERVER_CLASS_PATH, 'static');
@@ -42,7 +42,7 @@ const STUDIO_STATIC_PATH = path.join(STUDIO_SERVER_CLASS_PATH, 'static');
 const STUDIO2_PATH = '../studio2/source';
 const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO2_PATH, 'target/classes');
 const STUDIO2_STATIC_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
-const STUDIO2_FRONTEND_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
+const STUDIO2_FRONTEND_PATH = path.join(STUDIO2_PATH, 'frontend');
 
 /**
  * node path
