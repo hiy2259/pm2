@@ -17,7 +17,7 @@ const START_SERVICE_LOG = [
     'server Listening on port 18093' // data-import
 ];
 
-let isLastService = true;
+let isStartLastService = false;
 let startCount = 0;
 
 function connectPm2() {
@@ -136,11 +136,19 @@ PM2_START.stdout.on('data', (data) => {
         _.includes(log, START_SERVICE_LOG[2])) {
 
         // 처음 모든 서비스 구동시 마지막에 구동된 서비스때 brick restart 처리.
-        if (isLastService) {
+        if (!isStartLastService) {
             startCount++;
+            // process.argv =  [
+            //     '/usr/local/bin/node',
+            //     '/Users/yongs/workspace/pm2/pm2-control.js',
+            //     'brick',
+            //     'meta',
+            //     'studio',
+            //     'studio2'
+            // ]
             // startCount에서 brick은 빼야 한다.
-            if (startCount === (process.argv.length - 1)) {
-                isLastService = false;
+            if (startCount === (process.argv.length - 3)) {
+                isStartLastService = true;
             } else {
                 return;
             }
