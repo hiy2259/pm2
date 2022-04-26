@@ -2,13 +2,18 @@
  * 
  */
 const { spawn } = require('child_process');
+const path = require('path');
 
 const pm2 = require('pm2');
 const _ = require('lodash');
+const moment = require('moment');
 
 const SERVICES = require('./ecosystem.config.js');
+const SERVICES_NAMES = _.map(SERVICES, 'name');
 
 const PM2_START = spawn('pm2', ['logs', '--lines', '1']);
+
+const LOG_NAME = ['application.', moment().format('YYYY-MM-DD'), '_0.log'].join('');
 
 const ESSENTIAL_APP = ['brick', 'meta'];
 const START_SERVICE_LOG = [
@@ -17,6 +22,7 @@ const START_SERVICE_LOG = [
     'server Listening on port 18093' // data-import
 ];
 
+let serviceList = ['brick', 'meta'];
 let isStartLastService = false;
 let startCount = 0;
 
@@ -37,18 +43,17 @@ function startPm2() {
     const argv = process.argv;
     const execApps = argv.slice(2, argv.length);
 
-    let services = _.filter(SERVICES.apps, function (app) {
-        if (_.isEmpty(execApps) || execApps.length === SERVICES.apps.length) {
-            return true;
-        }
+    // brick, meta는 무조건 식행하게 변경 해야 함.
+    for(let i = 0, l = execApps.length; i < l; i++) {
+        var serviceName = execApps[i];
 
-        if (_.includes(ESSENTIAL_APP, app.name)) {
-            return true;
-        } else if (!_.isEmpty(execApps)) {
-            return (_.includes(execApps, app.name));
-        } else {
-            return false;
+        if (!_.includes(ESSENTIAL_APP, serviceName) && _.includes(SERVICES_NAMES, serviceName)) {
+            serviceList.push(serviceName);
         }
+    }
+
+    let services = _.filter(SERVICES.apps, function (app) {
+        return _.includes(serviceList, app.name);
     });
 
     console.log('services = ', services);
@@ -110,6 +115,7 @@ function reloadBrick() {
                 reject(error);
                 return;
             }
+
             resolve();
         });
     });
@@ -134,20 +140,14 @@ PM2_START.stdout.on('data', (data) => {
         _.includes(log, START_SERVICE_LOG[0]) ||
         _.includes(log, START_SERVICE_LOG[1]) ||
         _.includes(log, START_SERVICE_LOG[2])) {
-
+console.log('serviceList = ', serviceList);
+console.log('process.argv = ', process.argv);
         // 처음 모든 서비스 구동시 마지막에 구동된 서비스때 brick restart 처리.
         if (!isStartLastService) {
             startCount++;
-            // process.argv =  [
-            //     '/usr/local/bin/node',
-            //     '/Users/yongs/workspace/pm2/pm2-control.js',
-            //     'brick',
-            //     'meta',
-            //     'studio',
-            //     'studio2'
-            // ]
-            // startCount에서 brick은 빼야 한다.
-            if (startCount === (process.argv.length - 3)) {
+
+            // brick은 채크 대상 제외
+            if (startCount === (serviceList.length - 1)) {
                 isStartLastService = true;
             } else {
                 return;
@@ -178,3 +178,47 @@ PM2_START.stdout.on('data', (data) => {
             });
     }
 });
+
+function execSpringLog(logPath) {
+    const TAIL_STUDIO_LOG = spawn('tail', ['-f', '-n', '1', logPath]);
+
+    TAIL_STUDIO_LOG.stdout.on('data', (data) => {
+        let log = data.toString('utf-8');
+
+        if (_.includes(log, START_SERVICE_LOG[0])) {
+            setTimeout(() => {
+                reloadBrick().then(() => {
+                    console.log('restart brick success');
+                }).catch((error) => {
+                    console.log('restart brick error = ', error);
+                });
+            }, 500);
+        }
+    });
+}
+
+// 서비스 별로 만들어야 함...ㅠㅠ
+if (_.includes(process.argv, 'db-browser')) {
+    const logPath = path.join('..', 'cluster', 'logs', LOG_NAME);
+    execSpringLog(logPath);
+}
+
+if (_.includes(process.argv, 'meta-watch')) {
+    const logPath = path.join('..', 'meta', 'logs', LOG_NAME);
+    execSpringLog(logPath);
+}
+
+if (_.includes(process.argv, 'sherman')) {
+    const logPath = path.join('..', 'sherman', 'logs', LOG_NAME);
+    execSpringLog(logPath);
+}
+
+if (_.includes(process.argv, 'studio-watch')) {
+    const logPath = path.join('..', 'studio', 'logs', LOG_NAME);
+    execSpringLog(logPath);
+}
+
+if (_.includes(process.argv, 'studio2-watch')) {
+    const logPath = path.join('..', 'studio2', 'logs', LOG_NAME);
+    execSpringLog(logPath);
+}
