@@ -30,31 +30,32 @@ const DASHBOARD_STATIC_PATH = path.join(DASHBOARD_SERVER_CLASS_PATH, 'static');
 const DB_BROWSER_PATH = '../db-browser';
 const DB_BROWSER_SERVER_CLASS_PATH = path.join(DB_BROWSER_PATH, 'target/classes');
 const DB_BROWSER_STATIC_PATH = path.join(DB_BROWSER_SERVER_CLASS_PATH, 'static');
-const META_PATH = '../meta';
+const META_PATH = '../account';
 const META_SERVER_CLASS_PATH = path.join(META_PATH, 'target/classes');
 const META_SERVER_STATIC_PATH = path.join(META_SERVER_CLASS_PATH, 'static');
 const SHERMAN_PATH = '../sherman';
 const SHERMAN_SERVER_CLASS_PATH = path.join(SHERMAN_PATH, 'target/classes');
 const SHERMAN_STATIC_PATH = path.join(SHERMAN_SERVER_CLASS_PATH, 'static');
-const STUDIO_PATH = '../studio';
-const STUDIO_SERVER_CLASS_PATH = path.join(STUDIO_PATH, 'target/classes');
+const STUDIO_EDITOR_PATH = '../studio';
+const STUDIO_SERVER_CLASS_PATH = path.join(STUDIO_EDITOR_PATH, 'target/classes');
 const STUDIO_STATIC_PATH = path.join(STUDIO_SERVER_CLASS_PATH, 'static');
-const STUDIO2_PATH = '../studio2/source';
-const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO2_PATH, 'target/classes');
+const STUDIO_BROWSER_PATH = '../studio2/source';
+const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO_BROWSER_PATH, 'target/classes');
 const STUDIO2_STATIC_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
-const STUDIO2_FRONTEND_PATH = path.join(STUDIO2_PATH, 'frontend');
+const STUDIO2_FRONTEND_PATH = path.join(STUDIO_BROWSER_PATH, 'frontend');
 
 /**
  * node path
  */
-const HDFS_SERVER_PATH = '../hdfs/src/server';
+const HDFS_SERVER_PATH = '../file-browser/src/server';
 const DATA_IMPORT_SERVER_PATH = '../data-import/src/server';
 const BRICK_SERVER_PATH = '../brick/src/server';
 
 /**
  * maven
  */
-const MAVEN_PATH = '/opt/homebrew/Cellar/maven/3.8.1/libexec/bin/mvn';
+// 로컬 환경에 설치된 메이븐 경로 설정
+const MAVEN_PATH = '/opt/homebrew/Cellar/maven/3.8.5/libexec/bin/mvn';
 
 module.exports = {
     apps: [{
@@ -118,8 +119,8 @@ module.exports = {
         interpreter: 'none',
         exec_mode: 'fork'
     }, {
-        name: 'studio',
-        cwd: STUDIO_PATH,
+        name: 'studio-editor',
+        cwd: STUDIO_EDITOR_PATH,
         script: MAVEN_PATH,
         args: [
             'spring-boot:run'
@@ -130,8 +131,8 @@ module.exports = {
         interpreter: 'none',
         exec_mode: 'fork'
     }, {
-        name: 'studio2',
-        cwd: STUDIO2_PATH,
+        name: 'studio-browser',
+        cwd: STUDIO_BROWSER_PATH,
         script: MAVEN_PATH,
         args: [
             'spring-boot:run'
@@ -169,5 +170,10 @@ module.exports = {
             './logs'
         ],
         // max_memory_restart: '500M'
-    }]
+    }],
+    dbBrowserPath: DB_BROWSER_PATH,
+    metaPath: META_PATH,
+    shermanPath: SHERMAN_PATH,
+    studioEditorPath: STUDIO_EDITOR_PATH,
+    studioBrowserPath: STUDIO_BROWSER_PATH,
 };

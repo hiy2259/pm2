@@ -9,7 +9,7 @@ const _ = require('lodash');
 const moment = require('moment');
 
 const SERVICES = require('./ecosystem.config.js');
-const SERVICES_NAMES = _.map(SERVICES, 'name');
+const SERVICES_NAMES = _.map(SERVICES.apps, 'name');
 
 const PM2_START = spawn('pm2', ['logs', '--lines', '1']);
 
@@ -52,11 +52,12 @@ function startPm2() {
         }
     }
 
+    console.log('실행 서비스 목록 : ', serviceList);
+
     let services = _.filter(SERVICES.apps, function (app) {
         return _.includes(serviceList, app.name);
     });
 
-    console.log('services = ', services);
     return new Promise((resolve, reject) => {
         pm2.start(services, (error, apps) => {
             if (error) {
@@ -140,8 +141,7 @@ PM2_START.stdout.on('data', (data) => {
         _.includes(log, START_SERVICE_LOG[0]) ||
         _.includes(log, START_SERVICE_LOG[1]) ||
         _.includes(log, START_SERVICE_LOG[2])) {
-console.log('serviceList = ', serviceList);
-console.log('process.argv = ', process.argv);
+
         // 처음 모든 서비스 구동시 마지막에 구동된 서비스때 brick restart 처리.
         if (!isStartLastService) {
             startCount++;
@@ -198,27 +198,27 @@ function execSpringLog(logPath) {
 }
 
 // 서비스 별로 만들어야 함...ㅠㅠ
-if (_.includes(process.argv, 'db-browser')) {
-    const logPath = path.join('..', 'cluster', 'logs', LOG_NAME);
+if (_.includes(process.argv, 'db-browser-watch')) {
+    const logPath = path.join(SERVICES.dbBrowserPath, 'logs', LOG_NAME);
     execSpringLog(logPath);
 }
 
 if (_.includes(process.argv, 'meta-watch')) {
-    const logPath = path.join('..', 'meta', 'logs', LOG_NAME);
+    const logPath = path.join(SERVICES.metaPath, 'logs', LOG_NAME);
     execSpringLog(logPath);
 }
 
-if (_.includes(process.argv, 'sherman')) {
-    const logPath = path.join('..', 'sherman', 'logs', LOG_NAME);
+if (_.includes(process.argv, 'sherman-watch')) {
+    const logPath = path.join(SERVICES.shermanPath, 'logs', LOG_NAME);
     execSpringLog(logPath);
 }
 
-if (_.includes(process.argv, 'studio-watch')) {
-    const logPath = path.join('..', 'studio', 'logs', LOG_NAME);
+if (_.includes(process.argv, 'studio-editor-watch')) {
+    const logPath = path.join(SERVICES.studioEditorPath, 'logs', LOG_NAME);
     execSpringLog(logPath);
 }
 
-if (_.includes(process.argv, 'studio2-watch')) {
-    const logPath = path.join('..', 'studio2', 'logs', LOG_NAME);
+if (_.includes(process.argv, 'studio-browser-watch')) {
+    const logPath = path.join(SERVICES.studioBrowserPath, 'logs', LOG_NAME);
     execSpringLog(logPath);
 }
