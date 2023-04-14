@@ -36,10 +36,10 @@ const META_SERVER_STATIC_PATH = path.join(META_SERVER_CLASS_PATH, 'static');
 const SHERMAN_PATH = '../sherman';
 const SHERMAN_SERVER_CLASS_PATH = path.join(SHERMAN_PATH, 'target/classes');
 const SHERMAN_STATIC_PATH = path.join(SHERMAN_SERVER_CLASS_PATH, 'static');
-const STUDIO_EDITOR_PATH = '../studio';
+const STUDIO_EDITOR_PATH = '../studio-editor';
 const STUDIO_SERVER_CLASS_PATH = path.join(STUDIO_EDITOR_PATH, 'target/classes');
 const STUDIO_STATIC_PATH = path.join(STUDIO_SERVER_CLASS_PATH, 'static');
-const STUDIO_BROWSER_PATH = '../studio2/source';
+const STUDIO_BROWSER_PATH = '../studio-browser/source';
 const STUDIO2_SERVER_CLASS_PATH = path.join(STUDIO_BROWSER_PATH, 'target/classes');
 const STUDIO2_STATIC_PATH = path.join(STUDIO2_SERVER_CLASS_PATH, 'static');
 const STUDIO2_FRONTEND_PATH = path.join(STUDIO_BROWSER_PATH, 'frontend');
@@ -55,7 +55,7 @@ const BRICK_SERVER_PATH = '../brick/src/server';
  * maven
  */
 // 로컬 환경에 설치된 메이븐 경로 설정
-const MAVEN_PATH = '/opt/homebrew/Cellar/maven/3.8.5/libexec/bin/mvn';
+const MAVEN_PATH = '/Users/yongs/apache-maven-3.8.1/bin/mvn';
 
 module.exports = {
     apps: [{
